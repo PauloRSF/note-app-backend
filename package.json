@@ -1,17 +1,19 @@
 {
   "name": "note-app-backend",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "repository": "https://github.com/PauloRSF/note-app-backend.git",
   "author": "PauloRSF",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^5.9.3",
+    "mongoose": "^5.9.3"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.2"
   }
 }
