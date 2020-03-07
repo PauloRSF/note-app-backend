@@ -6,7 +6,8 @@
   "author": "PauloRSF",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "dev": "nodemon src/server.js"
+    "dev": "NODE_ENV=dev nodemon src/server.js",
+    "test": "NODE_ENV=test mocha"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
