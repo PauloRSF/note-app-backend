@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const jwtSign = require('../utils/JWTSigner');
 
 module.exports = {
     async login(req, res) {
@@ -17,7 +17,7 @@ module.exports = {
                 return res.status(401).json({ error: 'Wrong user credentials' });
             }
 
-            const accessToken = jwt.sign({ username, name }, process.env.JWTSECRET);
+            const accessToken = jwtSign({ username, name });
 
             return res.json({ accessToken });
         });
