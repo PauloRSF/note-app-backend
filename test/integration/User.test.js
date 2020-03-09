@@ -8,11 +8,9 @@ require('dotenv').config({
     path: '.env.test'
 });
 
-let con;
-
 describe('user model creation', function() {
     before(async function() {
-        con = await mongoose.connect(`mongodb://localhost:27017/${process.env.DB_NAME}?authSource=admin`, {
+        await mongoose.connect(`mongodb://localhost:27017/${process.env.DB_NAME}?authSource=admin`, {
             useNewUrlParser: true,
             useFindAndModify: true,
             useUnifiedTopology: true,
