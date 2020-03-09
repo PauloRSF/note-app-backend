@@ -3,8 +3,14 @@ const request = require('supertest');
 const assert = require('chai').assert;
 const mongoose = require('mongoose');
 const factory = require('../utils/factories');
+const User = require('../../src/models/User');
 
 describe('user login', function() {
+
+    beforeEach(async function() {
+        await User.deleteMany();
+    });
+
     it('should get a jwt token for a registered user', async function() {
         const user = {
             username: 'johndoe',
