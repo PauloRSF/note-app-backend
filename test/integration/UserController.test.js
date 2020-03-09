@@ -24,9 +24,9 @@ describe('user registration', function() {
             .post('/register')
             .send(existingUser)
             .expect(400);
-    })
+    });
 
     after(function(){
         mongoose.connection.db.dropDatabase();
     });
-})
+});
