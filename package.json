@@ -7,7 +7,8 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon src/server.js",
-    "test": "NODE_ENV=test nyc --reporter=text mocha --exit"
+    "cov-test": "NODE_ENV=test nyc --reporter=text mocha --exit",
+    "test": "NODE_ENV=test mocha --exit"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
