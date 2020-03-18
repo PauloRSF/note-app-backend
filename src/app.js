@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-require('dotenv').config({
-    path: process.env.NODE_ENV === 'dev'? '.env': '.env.test'
-});
+if(!process.env.ENV_SET){
+    require('dotenv').config({
+        path: process.env.NODE_ENV === 'dev'? '.env': '.env.test'
+    });   
+}
 
 class AppController {
     constructor() {
