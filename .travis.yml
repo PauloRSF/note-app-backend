@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "13.10.1"
+env:
+  - ENV_SET=yes DB_NAME=note-app-test-db JWTSECRET=THROWAWAYKEYTHROWAWAYKEYTHROWAWA
+before_script:
+  - sleep 15
+  - mongo note-app-test-db --eval 'db.createUser({user:"travis",pwd:"test",roles:["dbOwner"]});'
+services: 
+  - mongodb
+script:
+  - yarn test
