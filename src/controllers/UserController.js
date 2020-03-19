@@ -3,7 +3,11 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
     async store(req, res) {
-        const { username } = req.body;
+        const { username, password } = req.body;
+
+        if(!username || !password) {
+            return res.status(400).send({ error: 'Invalid register credentials' });
+        }
 
         try {
             if(await User.findOne({ username: username })){
