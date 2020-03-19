@@ -29,10 +29,23 @@ module.exports = {
     },
 
     async update(req, res) {
-        return res.send('');
+        const { title, text } = req.body;
+
+        const note = await Note.findById(req.params.noteId);
+
+        note.title = title? title : note.title;
+        note.text = text? text : note.text;
+
+        await note.save();
+
+        return res.json({ note });
     },
 
     async delete(req, res) {
+        await Note.deleteOne({
+            id: req.params.noteId
+        });
+
         return res.send('');
     }
 }
