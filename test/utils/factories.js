@@ -13,7 +13,8 @@ factory.define('User', User, function() {
 
 factory.define('Note', Note, {
     title: faker.lorem.sentence(),
-    text: faker.lorem.paragraphs()
+    text: faker.lorem.paragraphs(),
+    user: faker.internet.userName()
 });
 
 module.exports = factory;
