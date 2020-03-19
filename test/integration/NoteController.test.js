@@ -90,9 +90,9 @@ describe('note CRUD', function() {
         await Note.deleteMany();
     });
     
-    it('should create a new note for a user', function() {
+    it('should create a new note for a user', async function() {
 
-        const note = factory.build('Note');
+        const note = await factory.build('Note');
 
         return request(app)
             .post(`/${user.username}/notes`)
@@ -135,15 +135,15 @@ describe('note CRUD', function() {
 
     it('should update a note', async function() {
         const note = await factory.create('Note');
-        const newNoteData = factory.build('Note');
+        const newNoteData = await factory.build('Note');
 
         return request(app)
             .put(`/${user.username}/notes/${note._id}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200)
             .then(function(res) {
-                assert.equal(res.body.title, newNoteData.title);
-                assert.equal(res.body.text, newNoteData.text);
+                assert.equal(res.body.note.title, newNoteData.title);
+                assert.equal(res.body.note.text, newNoteData.text);
             });
     });
 
