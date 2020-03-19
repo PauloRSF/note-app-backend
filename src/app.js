@@ -30,7 +30,9 @@ class AppController {
             useFindAndModify: true,
             useUnifiedTopology: true
         }, function(error) {
-            console.log(error);
+            if(error){
+                console.log(error);
+            }
         });
     }
 }
