@@ -26,6 +26,17 @@ describe('user registration', function() {
             .expect(400);
     });
 
+    it('should not register a user with a missing username', async function() {
+        const user = await factory.build('User', {
+            username: undefined
+        });
+        
+        return request(app)
+            .post('/register')
+            .send(user)
+            .expect(400);
+    });
+
     after(function(){
         mongoose.connection.db.dropDatabase();
     });
