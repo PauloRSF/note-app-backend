@@ -1,8 +1,14 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-function authenticateJWT(req, res, next) {
+async function authenticateJWT(req, res, next) {
+    const { username } = req.params;
     const authHeader = req.headers.authorization;
     let token;
+
+    if(! await User.findOne({ username })) {
+        return res.status(404).json({ error: 'User not found' });
+    }
 
     if(authHeader) {
         token = authHeader.split(" ")[1];

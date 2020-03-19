@@ -1,15 +1,10 @@
-const User = require('../models/User');
 const Note = require('../models/Note');
 
 async function validateUrlParams(req, res, next) {
     const { username, noteId } = req.params;
-    
-    if(! await User.findOne({ username })) {
-        return res.status(404).json({ error: 'User not found' });
-    }
 
     if(username !== req.user.username) {
-        return res.status(403).json({ error: 'Can\'t create note for another user' })
+        return res.status(403).json({ error: 'Can\'t access another user\'s notes' })
     }
 
     if(noteId){
