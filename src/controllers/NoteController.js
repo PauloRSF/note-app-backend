@@ -18,12 +18,17 @@ module.exports = {
 
     async store(req, res) {
         const { title, text } = req.body;
-        
-        const note = await Note.create({
-            title,
-            text,
-            user: req.params.username
-        });
+        let note;
+
+        try {
+            note = await Note.create({
+                title,
+                text,
+                user: req.params.username
+            });
+        } catch(error) {
+            return res.status(400).json({ error: 'New notes must contain a text field' })
+        }
 
         return res.json({ note });
     },
