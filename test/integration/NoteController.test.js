@@ -90,7 +90,7 @@ describe('note CRUD', function() {
         await Note.deleteMany();
     });
     
-    it('should create a new note for a user', async function() {
+    it('should create a new note', async function() {
 
         const note = await factory.build('Note');
 
@@ -101,12 +101,25 @@ describe('note CRUD', function() {
             .expect(200);
     });
 
-    it('should get all the user notes', async function() {
+    it('should not create a new note without a text', async function() {
 
+        const note = await factory.build('Note', {
+            text: undefined
+        });
+
+        return request(app)
+            .post(`/${user.username}/notes`)
+            .send(note)
+            .set('Authorization', `Bearer ${accessToken}`)
+            .expect(400);
+    });
+
+    it('should get all the user notes', async function() {
+        let notes = new Array(5);
         const noteCount = 5;
 
         for(let i = 0; i < noteCount; i++){
-            await factory.create('Note', {
+            notes[i] = await factory.create('Note', {
                 user: user.username
             });
         }
@@ -117,6 +130,11 @@ describe('note CRUD', function() {
             .expect(200)
             .then(function(res) {
                 assert.equal(res.body.notes.length, noteCount);
+
+                for(i = 0; i < 5; i++) {
+                    assert.equal(res.body.notes[i].title, notes[i].title)
+                    assert.equal(res.body.notes[i].text, notes[i].text)
+                }
             });
     });
 
