@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 if(!process.env.ENV_SET){
     require('dotenv').config({
@@ -18,6 +19,7 @@ class AppController {
 
     setupMiddlewares() {
         this.express.use(express.json());
+        this.express.use(cors());
     }
 
     setupRoutes() {
