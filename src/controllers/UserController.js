@@ -11,7 +11,7 @@ module.exports = {
 
         try {
             if(await User.findOne({ username: username })){
-                return res.status(400).send({ error: 'User already exists' });
+                return res.status(409).send({ error: 'User already exists' });
             }
 
             const user = await User.create(req.body);
