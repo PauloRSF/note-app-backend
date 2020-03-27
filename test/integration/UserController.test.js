@@ -23,7 +23,7 @@ describe('user registration', function() {
         return request(app)
             .post('/register')
             .send(existingUser)
-            .expect(400);
+            .expect(409);
     });
 
     it('should not register a user with a missing username', async function() {
