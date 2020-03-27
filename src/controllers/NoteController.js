@@ -48,7 +48,7 @@ module.exports = {
 
     async delete(req, res) {
         await Note.deleteOne({
-            id: req.params.noteId
+            _id: req.params.noteId
         });
 
         return res.send('');
