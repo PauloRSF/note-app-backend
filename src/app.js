@@ -1,7 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const routes = require('./routes');
+const connectDB = require('./utils/connectDB');
 
 if(!process.env.ENV_SET){
     require('dotenv').config({
@@ -28,15 +28,7 @@ class AppController {
     }
 
     setupDatabase() {
-       mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DB_NAME}`, {
-            useNewUrlParser: true,
-            useFindAndModify: true,
-            useUnifiedTopology: true
-        }, function(error) {
-            if(error){
-                console.log(error);
-            }
-        });
+        connectDB();
     }
 }
 
