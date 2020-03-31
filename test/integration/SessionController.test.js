@@ -30,10 +30,13 @@ describe('user login', function() {
     it('should throw an error when logging in inexistent user', async function() {
         const user = await factory.build('User');
         
-        return request(app)
+        const res = await request(app)
             .post('/login')
             .send(user)
             .expect(404);
+
+        assert.notProperty(res.body, 'accessToken');
+        assert.equal(res.body.error, 'The user does not exist');
     });
 
     it('should throw an error when logging in user with incorrect password', async function() {
@@ -41,10 +44,13 @@ describe('user login', function() {
 
         user.password = 'wrongpassword';
 
-        return request(app)
+        const res = await request(app)
             .post('/login')
             .send(user)
             .expect(401);
+
+        assert.notProperty(res.body, 'accessToken');
+        assert.equal(res.body.error, 'Wrong user credentials');
     })
 
     after(function(){

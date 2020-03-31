@@ -19,53 +19,60 @@ describe('note collection access', function() {
         });
     });
 
-    it('should not be able to access notes without a authorization token', function() {
-
-        return request(app)
+    it('should not be able to access notes without a authorization token', async function() {
+        const res = await request(app)
             .get(`/${user.username}/notes`)
             .expect(401);
+
+        assert.equal(res.body.error, 'No authorization token supplied');
     });
 
-    it('should not access notes with an invalid token', function() {
-
-        return request(app)
+    it('should not access notes with an invalid token', async function() {
+        const res = await request(app)
             .get(`/${user.username}/notes`)
             .set('Authorization', `Bearer InvalidToken123`)
             .expect(403);
+
+        assert.equal(res.body.error, 'Invalid authorization token');
     });
 
     it('should not allow for an user to access another user\'s notes', async function() {
-
         const anotherUser = await factory.create('User');
 
-        return request(app)
+        const res = await request(app)
             .get(`/${anotherUser.username}/notes`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(403);
+        
+        assert.equal(res.body.error, 'Can\'t access another user\'s notes');
     });
 
-    it('should not be able to access the notes of an inexistent user', function() {
+    it('should not be able to access the notes of an inexistent user', async function() {
 
-        return request(app)
+        const res = await request(app)
             .get('/inexistentUser/notes')
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(404);
+        
+        assert.equal(res.body.error, 'User not found');
     });
 
-    it('should not be able to retrieve an inexistent note', function() {
-
-        return request(app)
+    it('should not be able to retrieve an inexistent note', async function() {
+        const res = await request(app)
             .get(`/${user.username}/notes/5e67d986bfdd9626dbd8d6f2`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(404);
+        
+        assert.equal(res.body.error, 'Note not found');
     });
 
-    it('should not be able to retrieve a note with an invalid id', function() {
-
-        return request(app)
+    it('should not be able to retrieve a note with an invalid id', async function() {
+        const res = await request(app)
             .get(`/${user.username}/notes/invalidNoteId`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(500);
+        
+        assert.equal(res.body.error, 'Error checking note existence');
     });
 
     after(function() {
@@ -74,7 +81,6 @@ describe('note collection access', function() {
 });
 
 describe('note CRUD', function() {
-
     let user, accessToken;
 
     before(async function() {
@@ -91,27 +97,41 @@ describe('note CRUD', function() {
     });
     
     it('should create a new note', async function() {
-
         const note = await factory.build('Note');
 
-        return request(app)
+        const res = await request(app)
             .post(`/${user.username}/notes`)
             .send(note)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200);
+
+        const dbNote = Note.findOne({
+            title: note.title,
+            text: note.text
+        });
+
+        assert.property(res.body, 'note');
+        assert.exists(dbNote);
     });
 
     it('should not create a new note without a text', async function() {
-
         const note = await factory.build('Note', {
             text: undefined
         });
 
-        return request(app)
+        const res = await request(app)
             .post(`/${user.username}/notes`)
             .send(note)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(400);
+
+        const dbNote = await Note.findOne({
+            title: note.title,
+            text: note.text
+        });
+
+        assert.equal(res.body.error, 'New notes must contain a text field');
+        assert.notExists(dbNote);
     });
 
     it('should get all the user notes', async function() {
@@ -124,7 +144,7 @@ describe('note CRUD', function() {
             });
         }
 
-        return request(app)
+        await request(app)
             .get(`/${user.username}/notes`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200)
@@ -155,23 +175,31 @@ describe('note CRUD', function() {
         const note = await factory.create('Note');
         const newNoteData = await factory.build('Note');
 
-        return request(app)
+        const res = await request(app)
             .put(`/${user.username}/notes/${note._id}`)
             .set('Authorization', `Bearer ${accessToken}`)
-            .expect(200)
-            .then(function(res) {
-                assert.equal(res.body.note.title, newNoteData.title);
-                assert.equal(res.body.note.text, newNoteData.text);
-            });
+            .expect(200);
+        
+        const dbNote = await Note.findById(note._id);
+
+        assert.equal(res.body.note.title, newNoteData.title);
+        assert.equal(res.body.note.text, newNoteData.text);
+
+        assert.equal(dbNote.title, newNoteData.title);
+        assert.equal(dbNote.text, newNoteData.text);
     });
 
     it('should delete a note', async function() {
         const note = await factory.create('Note');
 
-        return request(app)
+        await request(app)
             .delete(`/${user.username}/notes/${note._id}`)
             .set('Authorization', `Bearer ${accessToken}`)
             .expect(200);
+
+        const dbNote = await Note.findById(note._id);
+
+        assert.notExists(dbNote);
     });
 
     after(function() {
