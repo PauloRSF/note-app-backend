@@ -1,56 +1,47 @@
 const Note = require('../models/Note');
-const User = require('../models/User');
+const createResponse = require('../utils/createResponse');
 
 module.exports = {
-    async index(req, res) {
-        const notes = await Note.find({
-            user: req.params.username
-        });
+    async index(user) {
+        const notes = await Note.find({ user });
         
-        return res.json({ notes });
+        return createResponse(200, { notes });
     },
 
-    async show(req, res) {
-        const note = await Note.findById(req.params.noteId);
+    async show(id) {
+        const note = await Note.findById(id);
 
-        return res.json({ note });
+        return createResponse(200, { note });
     },
 
-    async store(req, res) {
-        const { title, text } = req.body;
+    async store(user, title, text) {
         let note;
 
         try {
-            note = await Note.create({
-                title,
-                text,
-                user: req.params.username
-            });
-        } catch(error) {
-            return res.status(400).json({ error: 'New notes must contain a text field' })
+            note = await Note.create({ title, text, user });
+        } catch(err) {
+            return createResponse(400, { error: 'New notes must contain a text field' });
         }
 
-        return res.json({ note });
+        return createResponse(200, { note });
     },
 
-    async update(req, res) {
-        const { title, text } = req.body;
+    async update(id, title = "", text = "") {
+        const note = await Note.findById(id);
 
-        const note = await Note.findById(req.params.noteId);
-
-        note.title = title? title : note.title;
-        note.text = text? text : note.text;
+        note.title = title? title: note.title;
+        note.text = text? text: note.text;
 
         await note.save();
 
-        return res.json({ note });
+        return createResponse(200, { note });
     },
 
-    async delete(req, res) {
+    async destroy(id) {
         await Note.deleteOne({
-            _id: req.params.noteId
+            _id: id
         });
 
-        return res.send('');
+        return createResponse(200)
     }
 }

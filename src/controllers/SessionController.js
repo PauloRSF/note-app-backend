@@ -1,25 +1,22 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwtSign = require('../utils/JWTSigner');
+const createResponse = require('../utils/createResponse');
 
 module.exports = {
-    async login(req, res) {
-        const { name, username, password } = req.body;
-
+    async login({ username, password }) {
         const user = await User.findOne({ username });
+        let accessToken;
 
         if(!user){
-            return res.status(404).json({ error: 'The user does not exist' });
+            return createResponse(404, { error: 'The user does not exist' });
         }
 
-        bcrypt.compare(password, user.password, function(err, result) {
-            if(!result){
-                return res.status(401).json({ error: 'Wrong user credentials' });
-            }
-
-            const accessToken = jwtSign({ username, name });
-
-            return res.json({ accessToken });
-        });
+        if(bcrypt.compareSync(password, user.password)) {
+            accessToken = jwtSign({ username });
+            return { status: 200, data: { accessToken } };
+        } else {
+            return createResponse(401, { error: 'Wrong user credentials' });
+        }
     }
 }

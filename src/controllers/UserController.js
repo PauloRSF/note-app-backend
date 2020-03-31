@@ -1,26 +1,23 @@
 const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const createResponse = require('../utils/createResponse');
 
 module.exports = {
-    async store(req, res) {
-        const { username, password } = req.body;
-
-        if(!username || !password) {
-            return res.status(400).send({ error: 'Invalid register credentials' });
+    async store({ name, username, password }) {
+        if(!(name && username && password)) {
+            return createResponse(400, { error: 'Invalid register credentials' });
         }
 
         try {
-            if(await User.findOne({ username: username })){
-                return res.status(409).send({ error: 'User already exists' });
+            if(await User.findOne({ username })){
+                return createResponse(409, { error: 'User already exists' });
             }
 
-            const user = await User.create(req.body);
+            const user = await User.create({ name, username, password });
 
             user.password = undefined;
-
-            return res.json({ user });
+            return createResponse(200, user);
         } catch(error) {
-            return res.status(500).send({ error: 'Registration failed' });
+            return createResponse(500, { error: 'Registration failed' });
         }
     }
 }
