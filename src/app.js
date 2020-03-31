@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const routes = require('./routes');
 
 if(!process.env.ENV_SET){
     require('dotenv').config({
@@ -23,7 +24,7 @@ class AppController {
     }
 
     setupRoutes() {
-        this.express.use(require('./routes'));
+        this.express.use(routes);
     }
 
     setupDatabase() {
