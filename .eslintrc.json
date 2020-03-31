@@ -3,7 +3,6 @@
         "node": true
     },
     "extends": [
-        "plugin:react/recommended",
         "airbnb"
     ],
     "globals": {
