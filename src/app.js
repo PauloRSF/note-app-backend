@@ -29,7 +29,7 @@ class AppController {
   }
 
   setupDatabase() {
-    connectDB();
+    this.dbConnection = connectDB();
   }
 }
 
