@@ -7,7 +7,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon src/server.js",
-    "cov-test": "NODE_ENV=test nyc --reporter=text-lcov mocha --exit",
+    "cov-test": "NODE_ENV=test nyc mocha --exit && nyc report --reporter=text-lcov | coveralls",
     "test": "NODE_ENV=test mocha --exit",
     "lint": "yarn eslint src/** test/**"
   },
