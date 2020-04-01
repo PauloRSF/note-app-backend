@@ -7,7 +7,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon src/server.js",
-    "cov-test": "NODE_ENV=test nyc --reporter=text mocha --exit",
+    "cov-test": "NODE_ENV=test nyc --reporter=text-lcov mocha --exit",
     "test": "NODE_ENV=test mocha --exit",
     "lint": "yarn eslint src/** test/**"
   },
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "coveralls": "^3.0.11",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.2",
