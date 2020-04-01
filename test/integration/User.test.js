@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
-const factory = require('../utils/factories');
 const bcrypt = require('bcrypt');
-const assert = require('chai').assert;
+const { assert } = require('chai');
+const factory = require('../utils/factories');
 const connectDB = require('../../src/utils/connectDB');
 
-describe('user model creation', function() {
-    before(connectDB);
-    
-    it('should encrypt a user password properly', async function() {
-        const password = 'noonewillknow'
-        
-        const user = await factory.create('User', { password });
+describe('user model creation', () => {
+  before(connectDB);
 
-        bcrypt.compare(password, user.password, function(err, res) {
-            assert(res, true);
-        });
-    });
+  it('should encrypt a user password properly', async () => {
+    const password = 'noonewillknow';
 
-    after(function(){
-        mongoose.connection.db.dropDatabase();
+    const user = await factory.create('User', { password });
+
+    bcrypt.compare(password, user.password, (err, res) => {
+      assert(res, true);
     });
-})
+  });
+
+  after(() => {
+    mongoose.connection.db.dropDatabase();
+  });
+});

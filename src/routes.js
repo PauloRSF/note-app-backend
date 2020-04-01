@@ -28,7 +28,8 @@ routes.post('/:username/notes/', noteMiddles, (req, res) => {
     req.body.text));
 });
 routes.put('/:username/notes/:noteId', noteMiddles, (req, res) => {
-  returnResponse(res, NoteController.update(req.params.noteId));
+  returnResponse(res, NoteController.update(req.params.noteId, req.body.title,
+    req.body.text));
 });
 routes.delete('/:username/notes/:noteId', noteMiddles, (req, res) => {
   returnResponse(res, NoteController.destroy(req.params.noteId));
