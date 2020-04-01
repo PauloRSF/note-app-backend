@@ -9,7 +9,7 @@
     "dev": "NODE_ENV=dev nodemon src/server.js",
     "cov-test": "NODE_ENV=test nyc --reporter=text mocha --exit",
     "test": "NODE_ENV=test mocha --exit",
-    "lint": "yarn eslint src/**"
+    "lint": "yarn eslint src/** test/**"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
