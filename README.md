@@ -1,7 +1,7 @@
 # Note App (Back End)
 
 <p align="center">
-  <img src="assets/note-app-banner.png" alt="Note app banner"/>
+  <img src="https://github.com/PauloRSF/note-app-frontend/blob/banner-image/assets/banner.png" alt="Note app banner"/>
 </p>
 
 [![Build Status](https://travis-ci.com/PauloRSF/note-app-backend.svg?branch=master)](https://travis-ci.com/PauloRSF/note-app-backend)
