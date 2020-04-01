@@ -10,7 +10,7 @@ describe('user login', () => {
     await User.deleteMany();
   });
 
-  it('should get a jwt token for a registered user', async () => {
+  it('should get a jwt for a registered user', async () => {
     const user = {
       username: 'johndoe',
       password: 'johnssecret',
