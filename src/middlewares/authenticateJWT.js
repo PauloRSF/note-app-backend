@@ -14,14 +14,12 @@ async function authenticateJWT(req, res, next) {
     return res.status(401).json({ error: 'No authorization token supplied' });
   }
 
-  await jwt.verify(token, process.env.JWTSECRET, (error, decoded) => {
-    if (error) {
-      return res.status(403).json({ error: 'Invalid authorization token' });
-    }
-
-    req.user = decoded;
+  try {
+    req.user = jwt.verify(token, process.env.JWTSECRET);
     return next();
-  });
+  } catch (err) {
+    return res.status(403).json({ error: 'Invalid authorization token' });
+  }
 }
 
 module.exports = authenticateJWT;
