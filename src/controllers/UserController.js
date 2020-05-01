@@ -2,8 +2,13 @@ const User = require('../models/User');
 const createResponse = require('../utils/createResponse');
 
 module.exports = {
-  async store({ name, username, password }) {
-    if (!(name && username && password)) {
+  async store({
+    name,
+    email,
+    username,
+    password,
+  }) {
+    if (!(name && email && username && password)) {
       return createResponse(400, { error: 'Invalid register credentials' });
     }
 
@@ -12,7 +17,12 @@ module.exports = {
         return createResponse(409, { error: 'User already exists' });
       }
 
-      const user = await User.create({ name, username, password });
+      const user = await User.create({
+        name,
+        email,
+        username,
+        password,
+      });
 
       user.password = undefined;
       return createResponse(200, user);
